@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,7 +37,6 @@ public class CvUploadService {
     }
 
     public UploadResponse uploadAndProcess(MultipartFile file) {
-        // 1. Validasiya
         fileValidationService.validateZipFile(file);
 
         // 2. ZIP aç
@@ -73,7 +73,7 @@ public class CvUploadService {
                     .totalFiles(cvFiles.size())
                     .tempDirectory(tempDir.toString())
                     .jobStatus(execution.getStatus().toString())
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(Instant.now())
                     .build();
 
         } catch (Exception e) {

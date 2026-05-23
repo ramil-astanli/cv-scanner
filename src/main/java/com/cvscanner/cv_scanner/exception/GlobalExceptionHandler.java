@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -23,7 +24,7 @@ public class GlobalExceptionHandler {
             UploadResponse.builder()
                 .success(false)
                 .message(e.getMessage())
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build()
         );
     }
@@ -36,7 +37,7 @@ public class GlobalExceptionHandler {
             UploadResponse.builder()
                 .success(false)
                 .message("Batch job artıq işləyir, gözləyin")
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build()
         );
     }
@@ -49,7 +50,7 @@ public class GlobalExceptionHandler {
             UploadResponse.builder()
                 .success(false)
                 .message("Fayl ölçüsü 500MB həddini keçir")
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build()
         );
     }
@@ -62,7 +63,7 @@ public class GlobalExceptionHandler {
             UploadResponse.builder()
                 .success(false)
                 .message("Fayl əməliyyatı zamanı xəta baş verdi")
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build()
         );
     }
@@ -75,7 +76,7 @@ public class GlobalExceptionHandler {
             UploadResponse.builder()
                 .success(false)
                 .message("Server xətası: " + e.getMessage())
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build()
         );
     }

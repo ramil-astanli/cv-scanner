@@ -64,7 +64,6 @@ public class BatchConfig {
         return jobLauncher;
     }
 
-    // Job bitdikdə temp qovluğu avtomatik sil
     private JobExecutionListener cleanupListener() {
         return new JobExecutionListener() {
             @Override

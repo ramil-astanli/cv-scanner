@@ -3,6 +3,8 @@ package com.cvscanner.cv_scanner.repository;
 import com.cvscanner.cv_scanner.entity.Candidate;
 import com.cvscanner.cv_scanner.enums.JobType;
 import com.cvscanner.cv_scanner.enums.ProcessingStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -17,8 +19,7 @@ public interface CandidateRepository
         JpaSpecificationExecutor<Candidate> {
 
     // Status üzrə filtrlə
-    List<Candidate> findByProcessingStatus(ProcessingStatus status);
-
+    Page<Candidate> findByProcessingStatus(ProcessingStatus status, Pageable pageable);
     // İş tipi üzrə filtrlə
     List<Candidate> findByJobType(JobType jobType);
 
