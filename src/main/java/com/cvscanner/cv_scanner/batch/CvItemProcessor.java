@@ -22,24 +22,21 @@ public class CvItemProcessor implements ItemProcessor<File, Candidate> {
 
     @Override
     public Candidate process(File file) throws Exception {
-        log.info("İşlənir: {}", file.getName());
+        log.info("Working: {}", file.getName());
 
-        // 1. Tika ilə xam mətn çıxar
         String rawText;
         try {
             rawText = tikaService.extractText(file);
         } catch (Exception e) {
-            // Tika oxuya bilmədi → SKIPPED olaraq qeyd et, writer-a göndər
-            log.warn("Tika oxuya bilmədi: {} → {}", file.getName(), e.getMessage());
+            log.warn("Tika couldn't read: {} → {}", file.getName(), e.getMessage());
             return buildFailedCandidate(file, ProcessingStatus.SKIPPED, e.getMessage());
         }
 
         if (rawText == null || rawText.isBlank()) {
-            log.warn("Boş mətn: {}", file.getName());
-            return buildFailedCandidate(file, ProcessingStatus.SKIPPED, "Boş mətn");
+            log.warn("Empty text: {}", file.getName());
+            return buildFailedCandidate(file, ProcessingStatus.SKIPPED, "Empty text");
         }
 
-        // 2. Parse et
         try {
             String name     = cvParserService.parseName(rawText);
             String email    = cvParserService.parseEmail(rawText);
@@ -61,13 +58,13 @@ public class CvItemProcessor implements ItemProcessor<File, Candidate> {
                 .processingStatus(ProcessingStatus.SUCCESS)
                 .build();
 
-            log.info("Parse edildi: {} → {} skill, {} il təcrübə",
+            log.info("Parsed: {} → {} skill, {} year experience",
                 file.getName(), skills.size(), years);
 
             return candidate;
 
         } catch (Exception e) {
-            log.error("Parse xətası: {}", file.getName(), e);
+            log.error("Parse error: {}", file.getName(), e);
             return buildFailedCandidate(file, ProcessingStatus.FAILED, e.getMessage());
         }
     }

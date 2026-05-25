@@ -17,20 +17,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/jobs")
 @RequiredArgsConstructor
-@Tag(name = "Job Monitoring", description = "Batch job statusu")
+@Tag(name = "Job Monitoring", description = "Batch job status and history")
 public class JobController {
 
     private final JobService jobService;
 
     @GetMapping("/status")
-    @Operation(summary = "Son batch job statusu")
+    @Operation(summary = "Last batch job status")
     public ResponseEntity<JobStatusResponse> getStatus() {
         return ResponseEntity.ok(jobService.getLastJobStatus());
     }
 
     @GetMapping("/history")
-    @Operation(summary = "Job tarixçəsi")
+    @Operation(summary = "Batch job history")
     public ResponseEntity<List<JobStatusResponse>> getHistory() {
         return ResponseEntity.ok(jobService.getJobHistory());
     }
 }
+

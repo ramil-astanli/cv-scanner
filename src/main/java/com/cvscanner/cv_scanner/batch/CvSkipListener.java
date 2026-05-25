@@ -12,16 +12,16 @@ public class CvSkipListener implements SkipListener<File, Object> {
 
     @Override
     public void onSkipInRead(Throwable t) {
-        log.error("READ zamanı skip: {}", t.getMessage());
+        log.error("Skip during READ: {}", t.getMessage());
     }
 
     @Override
     public void onSkipInProcess(File file, Throwable t) {
-        log.error("PROCESS zamanı skip: {} → {}", file.getName(), t.getMessage());
+        log.error("Skip during PROCESS: {} → {}", file.getName(), t.getMessage());
     }
 
     @Override
     public void onSkipInWrite(Object item, Throwable t) {
-        log.error("WRITE zamanı skip: {}", t.getMessage());
+        log.error("Skip during WRITE: {}", t.getMessage());
     }
 }

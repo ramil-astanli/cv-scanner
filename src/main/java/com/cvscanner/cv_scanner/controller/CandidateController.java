@@ -30,8 +30,6 @@ public class CandidateController {
             @RequestParam(required = false) String location,
             @RequestParam(required = false) JobType jobType,
             @RequestParam(required = false) ProcessingStatus status,
-
-            // Default olaraq ən yeni əlavə edilənlər yuxarıda, hər səhifədə 10 nəfər
             @ParameterObject
             @PageableDefault(size = 10, sort = "createdAt", direction = org.springframework.data.domain.Sort.Direction.DESC)
             Pageable pageable) {

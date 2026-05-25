@@ -26,7 +26,7 @@ public class CvItemWriter implements ItemWriter<Candidate> {
 
         candidateRepository.saveAll(chunk.getItems());
 
-        log.info("Chunk yazıldı → {} uğurlu, {} uğursuz (cəmi: {})",
+        log.info("Chunk written → {} successful, {} failed (total: {})",
             successCount, failedCount, chunk.size());
     }
 }

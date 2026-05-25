@@ -1,4 +1,3 @@
--- Candidates əsas cədvəli
 CREATE TABLE candidates (
                             id                  BIGSERIAL       PRIMARY KEY,
                             cv_file_name        VARCHAR(255),

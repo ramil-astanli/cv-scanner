@@ -23,14 +23,13 @@ public class CvItemReader implements ItemReader<File> {
     private int totalFiles;
     private int readCount = 0;
 
-    // JobParameters-dən tempDir-i al — BatchConfig inject edir
     @BeforeStep
     public void beforeStep(StepExecution stepExecution) {
         String tempDir = stepExecution
             .getJobParameters()
             .getString("tempDir");
 
-        log.info("CvItemReader başladı. Qovluq: {}", tempDir);
+        log.info("CvItemReader started. Folder: {}", tempDir);
 
         Path dirPath = Paths.get(tempDir);
 
@@ -46,10 +45,10 @@ public class CvItemReader implements ItemReader<File> {
 
             this.totalFiles = files.size();
             this.fileIterator = files.iterator();
-            log.info("Oxunacaq CV faylları: {} ədəd", totalFiles);
+            log.info("CV files to be read: {} pieces", totalFiles);
 
         } catch (Exception e) {
-            log.error("Qovluq oxuna bilmədi: {}", tempDir, e);
+            log.error("The folder could not be read: {}", tempDir, e);
             this.fileIterator = List.<File>of().iterator();
         }
     }
@@ -62,12 +61,11 @@ public class CvItemReader implements ItemReader<File> {
         if (fileIterator != null && fileIterator.hasNext()) {
             File file = fileIterator.next();
             readCount++;
-            log.debug("Oxunur [{}/{}]: {}", readCount, totalFiles, file.getName());
+            log.debug("Reading [{}/{}]: {}", readCount, totalFiles, file.getName());
             return file;
         }
 
-        // null qaytarmaq → Spring Batch-ə "bitti" siqnalıdır
-        log.info("Bütün fayllar oxundu: {} ədəd", readCount);
+        log.info("All files read: {} number", readCount);
         return null;
     }
 }

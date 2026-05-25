@@ -36,4 +36,3 @@ build/
 temp-cvs/
 *.log
 .env
-application-local.properties

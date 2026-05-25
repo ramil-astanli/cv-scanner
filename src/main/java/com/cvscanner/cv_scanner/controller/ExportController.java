@@ -14,30 +14,30 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/candidates/export")
 @RequiredArgsConstructor
-@Tag(name = "Export", description = "Kandidat datasını CSV və Excel formatında yüklə")
+@Tag(name = "Export", description = "Download candidate data as CSV or Excel")
 public class ExportController {
 
     private final ExportService exportService;
 
     @GetMapping("/csv")
-    @Operation(summary = "CSV formatında yüklə")
+    @Operation(summary = "Download as CSV")
     public ResponseEntity<byte[]> exportCsv() {
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=candidates.csv")
-            .contentType(MediaType.parseMediaType("text/csv"))
-            .body(exportService.exportCsv());
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=candidates.csv")
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(exportService.exportCsv());
     }
 
     @GetMapping("/xlsx")
-    @Operation(summary = "Excel formatında yüklə")
+    @Operation(summary = "Download as Excel")
     public ResponseEntity<byte[]> exportExcel() throws IOException {
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=candidates.xlsx")
-            .contentType(MediaType.parseMediaType(
-                "application/vnd.openxmlformats-officedocument" +
-                ".spreadsheetml.sheet"))
-            .body(exportService.exportExcel());
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=candidates.xlsx")
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument" +
+                                ".spreadsheetml.sheet"))
+                .body(exportService.exportExcel());
     }
 }
