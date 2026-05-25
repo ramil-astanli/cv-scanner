@@ -15,7 +15,6 @@ public class FileValidationService {
 
     private final Tika tika = new Tika();
 
-    // Sadəcə uzantıya baxmır — Tika ilə real MIME type yoxlayır
     public void validateZipFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Fayl boşdur");

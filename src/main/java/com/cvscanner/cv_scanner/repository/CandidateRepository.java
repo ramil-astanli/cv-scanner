@@ -18,18 +18,14 @@ public interface CandidateRepository
         extends JpaRepository<Candidate, Long>,
         JpaSpecificationExecutor<Candidate> {
 
-    // Status üzrə filtrlə
     Page<Candidate> findByProcessingStatus(ProcessingStatus status, Pageable pageable);
-    // İş tipi üzrə filtrlə
+
     List<Candidate> findByJobType(JobType jobType);
 
-    // Lokasiya üzrə filtrlə (case-insensitive)
     List<Candidate> findByPreferredLocationContainingIgnoreCase(String location);
 
-    // Minimum təcrübə üzrə filtrlə
     List<Candidate> findByYearsOfExperienceGreaterThanEqual(Integer years);
 
-    // Müəyyən skill-ə sahib kandidatlar
     @Query("""
         SELECT DISTINCT c FROM Candidate c
         JOIN c.skills s
@@ -37,9 +33,7 @@ public interface CandidateRepository
     """)
     List<Candidate> findBySkill(@Param("skill") String skill);
 
-    // Uğurla işlənmiş sayı
     long countByProcessingStatus(ProcessingStatus status);
 
-    // Faylın artıq işlənib-işlənmədiyini yoxla
     boolean existsByCvFileName(String cvFileName);
 }

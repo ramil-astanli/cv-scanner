@@ -80,7 +80,6 @@ public class ExportService {
         }
     }
 
-    // --- Köməkçi Metodlar ---
     private byte[] addUtf8Bom(byte[] content) {
         byte[] bom = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
         byte[] result = new byte[bom.length + content.length];

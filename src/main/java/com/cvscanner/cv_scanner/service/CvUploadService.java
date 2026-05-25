@@ -1,7 +1,6 @@
 package com.cvscanner.cv_scanner.service;
 
 import com.cvscanner.cv_scanner.dto.UploadResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -12,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -39,11 +37,9 @@ public class CvUploadService {
     public UploadResponse uploadAndProcess(MultipartFile file) {
         fileValidationService.validateZipFile(file);
 
-        // 2. ZIP aç
         Path tempDir = fileStorageService.unzipToTemp(file);
 
         try {
-            // 3. Faylları siyahıya al
             List<File> cvFiles = fileStorageService.listCvFiles(tempDir);
 
             if (cvFiles.isEmpty()) {
@@ -53,15 +49,11 @@ public class CvUploadService {
 
             log.info("{} CV faylı tapıldı → batch job başladılır", cvFiles.size());
 
-            // 4. Batch job parametrleri
-            // 'tempDir' parametrini mütləq yol (absolute path) olaraq göndərmək daha etibarlıdır
             JobParameters params = new JobParametersBuilder()
                     .addString("tempDir", tempDir.toAbsolutePath().toString())
                     .addLong("startTime", System.currentTimeMillis())
                     .toJobParameters();
 
-            // DİQQƏT: Əgər JobLauncher-i Configuration-da TaskExecutor ilə konfiqurasiya etmisənsə,
-            // bu sətir asinxron işləyəcək və dərhal Execution obyektini qaytaracaq.
             JobExecution execution = jobLauncher.run(cvProcessingJob, params);
 
             log.info("Batch job trigger edildi. ID: {}, Status: {}",

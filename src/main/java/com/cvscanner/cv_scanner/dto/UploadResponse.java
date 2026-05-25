@@ -10,8 +10,8 @@ import java.time.Instant;
 public class UploadResponse {
     private boolean success;
     private String message;
-    private int totalFiles;        // ZIP içindəki fayl sayı
-    private String tempDirectory;  // faylların saxlandığı qovluq
-    private String jobStatus;      // batch job statusu
+    private int totalFiles;
+    private String tempDirectory;
+    private String jobStatus;
     private Instant timestamp;
 }

@@ -11,7 +11,6 @@ import java.util.List;
 
 public class CandidateSpec {
 
-    // Bütün filterləri birləşdirir
     public static Specification<Candidate> filter(
             String skill,
             Integer minExperience,
@@ -22,7 +21,6 @@ public class CandidateSpec {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // Skill filtri — candidate_skills cədvəlinə JOIN
             if (skill != null && !skill.isBlank()) {
                 Join<Candidate, String> skillJoin = root.join("skills", JoinType.INNER);
                 predicates.add(
@@ -39,7 +37,6 @@ public class CandidateSpec {
                 );
             }
 
-            // Lokasiya filtri — case-insensitive
             if (location != null && !location.isBlank()) {
                 predicates.add(
                     cb.like(cb.lower(root.get("preferredLocation")),
@@ -47,14 +44,12 @@ public class CandidateSpec {
                 );
             }
 
-            // İş tipi filtri
             if (jobType != null) {
                 predicates.add(
                     cb.equal(root.get("jobType"), jobType)
                 );
             }
 
-            // Status filtri
             if (status != null) {
                 predicates.add(
                     cb.equal(root.get("processingStatus"), status)

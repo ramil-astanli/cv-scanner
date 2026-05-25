@@ -55,12 +55,10 @@ public class Candidate extends BaseEntity {
     @Column(name = "job_type")
     private JobType jobType;
 
-    // Batch processing nəticəsi
     @Enumerated(EnumType.STRING)
     @Column(name = "processing_status", nullable = false)
     private ProcessingStatus processingStatus;
 
-    // Xəta varsa səbəbi
     @Column(name = "error_message", columnDefinition = "TEXT")
     private String errorMessage;
 }

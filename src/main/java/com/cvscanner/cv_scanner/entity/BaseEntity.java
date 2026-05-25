@@ -27,7 +27,7 @@ public class BaseEntity {
     private String createdBy;
 
     @LastModifiedDate
-    @Column(name = "UPDATED_AT", insertable = false) // <--- BU HİSSƏNİ ƏLAVƏ ET
+    @Column(name = "UPDATED_AT", insertable = false)
     private Instant updatedAt;
 
     @LastModifiedBy

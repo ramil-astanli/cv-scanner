@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Validasiya xətaları — 400
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<UploadResponse> handleValidation(IllegalArgumentException e) {
         log.warn("Validasiya xətası: {}", e.getMessage());
@@ -29,7 +27,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // Batch job artıq işləyir — 409 Conflict
     @ExceptionHandler(JobExecutionAlreadyRunningException.class)
     public ResponseEntity<UploadResponse> handleJobRunning(JobExecutionAlreadyRunningException e) {
         log.warn("Job artıq işləyir");
@@ -42,7 +39,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // Fayl ölçüsü həddini keçdi — 413
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<UploadResponse> handleMaxSize(MaxUploadSizeExceededException e) {
         log.warn("Fayl ölçüsü həddini keçdi");
@@ -55,7 +51,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // FileStorage xətaları — 500
     @ExceptionHandler(FileStorageException.class)
     public ResponseEntity<UploadResponse> handleStorage(FileStorageException e) {
         log.error("Fayl saxlama xətası: {}", e.getMessage());
@@ -68,7 +63,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // Gözlənilməz xətalar — 500
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<UploadResponse> handleRuntime(RuntimeException e) {
         log.error("Gözlənilməz xəta", e);

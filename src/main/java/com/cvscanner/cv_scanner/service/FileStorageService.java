@@ -22,10 +22,7 @@ public class FileStorageService {
     @Value("${app.upload.temp-dir}")
     private String tempDir;
 
-    // ZIP faylını qəbul edib, içindəki CV-ləri temp qovluğa çıxarır
-    // Hər upload üçün unikal qovluq yaradır — paralel uploadlar bir-birinə qarışmasın
     public Path unzipToTemp(MultipartFile zipFile) {
-        // Hər upload üçün UUID ilə unikal qovluq
         String sessionId = UUID.randomUUID().toString();
         Path sessionDir = Paths.get(tempDir, sessionId);
 
@@ -49,14 +46,11 @@ public class FileStorageService {
         try (ZipInputStream zis = new ZipInputStream(zipFile.getInputStream())) {
             ZipEntry entry;
 
-            // targetDir-in mütləq və normallaşdırılmış yolunu öncədən götürək
             Path absoluteTargetDir = targetDir.toAbsolutePath().normalize();
 
             while ((entry = zis.getNextEntry()) != null) {
-                // entryPath-ı da mütləq və normallaşdırılmış formaya gətiririk
                 Path entryPath = targetDir.resolve(entry.getName()).toAbsolutePath().normalize();
 
-                // İndi hər ikisi eyni formatdadır (nöqtələr və qəribə slaşlar təmizlənib)
                 if (!entryPath.startsWith(absoluteTargetDir)) {
                     log.warn("Zip Slip cəhdi aşkarlandı: {}", entry.getName());
                     zis.closeEntry();
@@ -79,7 +73,6 @@ public class FileStorageService {
         }
     }
 
-    // Qovluqdakı bütün PDF və DOCX fayllarını siyahıya alır
     public List<File> listCvFiles(Path directory) {
         List<File> files = new ArrayList<>();
         try {
@@ -96,11 +89,10 @@ public class FileStorageService {
         return files;
     }
 
-    // Temp qovluğu sil — batch job bitdikdən sonra çağırılır
     public void cleanupDirectory(Path directory) {
         try {
             Files.walk(directory)
-                    .sorted((a, b) -> b.compareTo(a)) // faylları əvvəl, qovluqları sonra sil
+                    .sorted((a, b) -> b.compareTo(a))
                     .forEach(path -> {
                         try {
                             Files.delete(path);
@@ -116,7 +108,6 @@ public class FileStorageService {
 
     private boolean isSupportedFile(String fileName) {
         String lower = fileName.toLowerCase();
-        // Professional sistemdə ZIP daxilindəki ZIP-ləri də dəstəkləmək yaxşı olar
         return lower.endsWith(".pdf") || lower.endsWith(".docx") || lower.endsWith(".zip");
     }
 }

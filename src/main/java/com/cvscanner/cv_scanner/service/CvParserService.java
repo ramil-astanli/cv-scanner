@@ -13,27 +13,23 @@ import java.util.regex.Pattern;
 @Service
 public class CvParserService {
 
-    // Ad: böyük hərflə başlayan 2-3 söz — CV-nin ilk sətrlərindən
     private static final Pattern NAME_PATTERN = Pattern.compile(
             "([A-ZÀ-Ö][a-zà-ö]+(?:\\s[A-ZÀ-Ö][a-zà-ö]+){1,2})"
     );
-    // Email
+
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
         "[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}"
     );
 
-    // Telefon: +994, 050, 055, +1 formatları
     private static final Pattern PHONE_PATTERN = Pattern.compile(
         "(?:\\+?\\d{1,3}[\\s\\-]?)?(?:\\(?\\d{2,4}\\)?[\\s\\-]?)?\\d{3}[\\s\\-]?\\d{2}[\\s\\-]?\\d{2}"
     );
 
-    // Təcrübə: "5 years", "3+ yıl", "2 il"
     private static final Pattern EXPERIENCE_PATTERN = Pattern.compile(
             "(\\d+)\\s*(?:years?|yıl|il|year|yrs?)\\s*(?:of\\s*)?(?:experience|work|təcrübə)?",
             Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS
     );
 
-    // Texniki skills siyahısı
     private static final List<String> KNOWN_SKILLS = List.of(
         "Java", "Spring Boot", "Spring Batch", "Spring MVC",
         "Python", "Django", "FastAPI",
@@ -51,7 +47,6 @@ public class CvParserService {
     public String parseName(String text) {
         if (text == null || text.isBlank()) return "Unknown Candidate";
 
-        // Ad adətən ilk 500 simvolun içində olur
         String leadText = text.length() > 500 ? text.substring(0, 500) : text;
         Matcher matcher = NAME_PATTERN.matcher(leadText);
 
@@ -81,9 +76,8 @@ public class CvParserService {
         return null;
     }
 
-    // parseYearsOfExperience daxilində kiçik bir düzəliş:
     public Integer parseYearsOfExperience(String text) {
-        if (text == null || text.isBlank()) return 0; // null yerinə 0 daha yaxşıdır
+        if (text == null || text.isBlank()) return 0;
 
         Matcher matcher = EXPERIENCE_PATTERN.matcher(text);
         int maxYears = 0;
@@ -91,7 +85,7 @@ public class CvParserService {
         while (matcher.find()) {
             try {
                 int years = Integer.parseInt(matcher.group(1));
-                if (years > maxYears && years <= 40) { // 40+ adətən səhv tutulmuş rəqəmdir
+                if (years > maxYears && years <= 40) {
                     maxYears = years;
                 }
             } catch (NumberFormatException e) {
@@ -120,7 +114,6 @@ public class CvParserService {
     public String parseLocation(String text) {
         if (text == null || text.isBlank()) return null;
 
-        // Məşhur şəhərlər — genişləndirilə bilər
         List<String> cities = List.of(
             "Baku", "Bakı", "Istanbul", "London", "Berlin",
             "Amsterdam", "Warsaw", "Prague", "Budapest",

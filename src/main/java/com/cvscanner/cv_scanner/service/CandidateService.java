@@ -23,8 +23,6 @@ public class CandidateService {
 
     private final CandidateRepository candidateRepository;
 
-    // 1. Read-only transaction performansı artırır
-    // 2. Pageable ilə hər dəfə yalnız lazım olan qədər (məs: 20 nəfər) data gətirilir
     @Transactional(readOnly = true)
     public Page<CandidateResponse> getCandidates(
             String skill,
@@ -38,7 +36,6 @@ public class CandidateService {
                 skill, minExperience, location, jobType, status
         );
 
-        // findAll(spec, pageable) həm datanı, həm də ümumi say məlumatını qaytarır
         return candidateRepository.findAll(spec, pageable)
                 .map(this::toResponse);
     }
@@ -61,7 +58,7 @@ public class CandidateService {
                 .email(c.getEmail())
                 .phone(c.getPhone())
                 .skills(c.getSkills() != null
-                        ? new ArrayList<>(c.getSkills())  // ← lazy collection-u eager-ə çevir
+                        ? new ArrayList<>(c.getSkills())
                         : List.of())
                 .yearsOfExperience(c.getYearsOfExperience())
                 .preferredLocation(c.getPreferredLocation())

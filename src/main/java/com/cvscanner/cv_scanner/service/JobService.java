@@ -18,20 +18,18 @@ import java.util.List;
 public class JobService {
 
     private final JobExplorer jobExplorer;
-    // Repository-ni hələ də saxlaya bilərsən, əgər ümumi statistika lazımdırsa
 
     public JobStatusResponse getLastJobStatus() {
         JobExecution lastExecution = jobExplorer.findJobInstancesByJobName("cvProcessingJob", 0, 1)
                 .stream()
                 .flatMap(i -> jobExplorer.getJobExecutions(i).stream())
-                .max(Comparator.comparing(JobExecution::getStartTime)) // Ən sonuncunu tapırıq
+                .max(Comparator.comparing(JobExecution::getStartTime))
                 .orElse(null);
 
         if (lastExecution == null) {
             return JobStatusResponse.builder().jobName("cvProcessingJob").status("NEVER_RUN").build();
         }
 
-        // Real vaxtda o işdə neçə fayl keçib:
         long successCount = lastExecution.getStepExecutions().stream()
                 .mapToLong(StepExecution::getWriteCount).sum();
         long failedCount = lastExecution.getStepExecutions().stream()
@@ -56,7 +54,7 @@ public class JobService {
         return jobExplorer.findJobInstancesByJobName("cvProcessingJob", 0, 10)
                 .stream()
                 .flatMap(i -> jobExplorer.getJobExecutions(i).stream())
-                .sorted(Comparator.comparing(JobExecution::getStartTime).reversed()) // Tarixə görə sırala
+                .sorted(Comparator.comparing(JobExecution::getStartTime).reversed())
                 .map(exec -> JobStatusResponse.builder()
                         .jobName(exec.getJobInstance().getJobName())
                         .status(exec.getStatus().toString())
